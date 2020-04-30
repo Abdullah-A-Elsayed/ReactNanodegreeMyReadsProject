@@ -41,6 +41,7 @@ function searchPage({ shelvesState, updateShelfHandler }) {
         </Link>
         <div className="search-books-input-wrapper">
           <input
+            autoFocus
             type="text"
             placeholder="Search by title or author"
             onChange={(e) => searchHandler(e.target.value)}
