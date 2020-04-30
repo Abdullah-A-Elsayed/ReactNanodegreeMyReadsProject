@@ -12,6 +12,11 @@ function searchPage({ shelvesState, updateShelfHandler }) {
       let books = await BooksAPI.search(searchStr, 20);
       if (books.error) return;
       for (let i = 0; i < books.length; i++) {
+        if (Object.keys(shelvesState) < 3) {
+          // state not loaded yet (to avoid errors)
+          books[i].shelf = "none";
+          continue;
+        }
         if (
           shelvesState.currentlyReading.map((b) => b.id).indexOf(books[i].id) >
           -1
