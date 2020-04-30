@@ -4,8 +4,6 @@ This is my implementation for the final assessment project for Udacity's React F
 
 ## How to use?
 
-To get started developing right away:
-
 - install all project dependencies with `npm install`
 - start the development server with `npm start`
 - manage your library from home page moving books between shelves ["currently reading", "read", "want to read"].
