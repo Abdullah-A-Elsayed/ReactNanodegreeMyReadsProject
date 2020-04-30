@@ -10,7 +10,7 @@ function searchPage({ shelvesState, updateShelfHandler }) {
     setUserInput(searchStr);
     if (searchStr.length === 0) return setAllBooks([]);
     let books = await BooksAPI.search(searchStr, 20);
-    if (books.error) return;
+    if (books.error) return setAllBooks([]);
     for (let i = 0; i < books.length; i++) {
       if (Object.keys(shelvesState) < 3) {
         // state not loaded yet (to avoid errors)
