@@ -1,41 +1,37 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import * as BooksAPI from "../../BooksAPI";
 import BookList from "../shared/bookList";
 import propTypes from "prop-types";
 function searchPage({ shelvesState, updateShelfHandler }) {
-  const [searchStr, setSearchStr] = useState("");
   const [allBooks, setAllBooks] = useState([]);
-  useEffect(() => {
-    if (!searchStr) return;
-    const search = async () => {
-      let books = await BooksAPI.search(searchStr, 20);
-      if (books.error) return;
-      for (let i = 0; i < books.length; i++) {
-        if (Object.keys(shelvesState) < 3) {
-          // state not loaded yet (to avoid errors)
-          books[i].shelf = "none";
-          continue;
-        }
-        if (
-          shelvesState.currentlyReading.map((b) => b.id).indexOf(books[i].id) >
-          -1
-        )
-          books[i].shelf = "currentlyReading";
-        else if (shelvesState.read.map((b) => b.id).indexOf(books[i].id) > -1)
-          books[i].shelf = "read";
-        else if (
-          shelvesState.wantToRead.map((b) => b.id).indexOf(books[i].id) > -1
-        )
-          books[i].shelf = "wantToRead";
-        else {
-          books[i].shelf = "none";
-        }
+  const searchHandler = async (searchStr) => {
+    console.log(searchStr);
+    if (searchStr.length === 0) return setAllBooks([]);
+    let books = await BooksAPI.search(searchStr, 20);
+    if (books.error) return;
+    for (let i = 0; i < books.length; i++) {
+      if (Object.keys(shelvesState) < 3) {
+        // state not loaded yet (to avoid errors)
+        books[i].shelf = "none";
+        continue;
       }
-      setAllBooks(books);
-    };
-    search();
-  }, [searchStr]);
+      if (
+        shelvesState.currentlyReading.map((b) => b.id).indexOf(books[i].id) > -1
+      )
+        books[i].shelf = "currentlyReading";
+      else if (shelvesState.read.map((b) => b.id).indexOf(books[i].id) > -1)
+        books[i].shelf = "read";
+      else if (
+        shelvesState.wantToRead.map((b) => b.id).indexOf(books[i].id) > -1
+      )
+        books[i].shelf = "wantToRead";
+      else {
+        books[i].shelf = "none";
+      }
+    }
+    setAllBooks(books);
+  };
   return (
     <div className="search-books">
       <div className="search-books-bar">
@@ -46,8 +42,7 @@ function searchPage({ shelvesState, updateShelfHandler }) {
           <input
             type="text"
             placeholder="Search by title or author"
-            value={searchStr}
-            onChange={(e) => setSearchStr(e.target.value)}
+            onChange={(e) => searchHandler(e.target.value)}
           />
         </div>
       </div>
