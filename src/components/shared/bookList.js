@@ -16,7 +16,9 @@ function bookList({ books, updateShelfHandler }) {
                   style={{
                     width: 128,
                     height: 193,
-                    backgroundImage: `url("${book.imageLinks.thumbnail}")`,
+                    backgroundImage: `url("${
+                      book.imageLinks ? book.imageLinks.thumbnail : ""
+                    }")`,
                   }}
                 ></div>
                 <div className="book-shelf-changer">
