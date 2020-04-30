@@ -1,6 +1,7 @@
 import React from "react";
 import Shelf from "./shelf";
-export default function homePage({ setShowSearchPage }) {
+import { Link } from "react-router-dom";
+export default function homePage({}) {
   return (
     <div className="list-books">
       <div className="list-books-title">
@@ -14,7 +15,7 @@ export default function homePage({ setShowSearchPage }) {
         </div>
       </div>
       <div className="open-search">
-        <a onClick={() => setShowSearchPage(true)}>Add a book</a>
+        <Link to="/search">Add a book</Link>
       </div>
     </div>
   );
