@@ -1,20 +1,58 @@
-import React, { useState } from "react";
-// import * as BooksAPI from './BooksAPI'
+import "./App.css";
+import "primeicons/primeicons.css";
+import React, { useState, useEffect } from "react";
+import * as BooksAPI from "./BooksAPI";
 import SearchPage from "./components/searchPage/";
 import HomePage from "./components/homePage/";
-import "./App.css";
 import { Route } from "react-router-dom";
+import groupBy from "lodash.groupby";
 function BooksApp() {
-  /**
-   * TODO: Instead of using this state variable to keep track of which page
-   * we're on, use the URL in the browser's address bar. This will ensure that
-   * users can use the browser's back and forward buttons to navigate between
-   * pages, as well as provide a good URL they can bookmark and share.
-   */
-
+  const [shelvesState, setShelvesState] = useState({});
+  // component did Mount -> BooksAPI.getAll()
+  useEffect(() => {
+    async function fetchShelvesData() {
+      const allBooks = await BooksAPI.getAll();
+      const groupedBooks = groupBy(allBooks, "shelf");
+      if (!groupedBooks.currentlyReading) groupedBooks.currentlyReading = [];
+      if (!groupedBooks.read) groupedBooks.read = [];
+      if (!groupedBooks.wantToRead) groupedBooks.wantToRead = [];
+      setShelvesState(groupedBooks);
+    }
+    fetchShelvesData();
+  }, []);
+  // moves a book to another shelf
+  const updateShelfHandler = (book, shelf) => {
+    BooksAPI.update(book, shelf);
+    setShelvesState((prevState) => {
+      // remove from state
+      if (book.shelf) {
+        const prevIndex = prevState[book.shelf]
+          .map((b) => b.id)
+          .indexOf(book.id);
+        console.log(prevIndex);
+        if (prevIndex > -1) {
+          prevState[book.shelf].splice(prevIndex, 1);
+        }
+      }
+      // add to state
+      book.shelf = shelf;
+      prevState[shelf].push(book);
+      return { ...prevState };
+      //Another solution: re-get all;
+    });
+  };
   return (
     <div className="app">
-      <Route exact path="/" render={() => <HomePage />} />
+      <Route
+        exact
+        path="/"
+        render={() => (
+          <HomePage
+            shelvesState={shelvesState}
+            updateShelfHandler={updateShelfHandler}
+          />
+        )}
+      />
       <Route path="/search" render={() => <SearchPage />} />
     </div>
   );

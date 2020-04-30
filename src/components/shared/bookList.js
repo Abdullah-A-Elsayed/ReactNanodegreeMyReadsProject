@@ -1,64 +1,56 @@
 import React from "react";
+import { update } from "../../BooksAPI";
 
-export default function bookList() {
+export default function bookList({ books, updateShelfHandler }) {
+  console.log(books);
   return (
     <ol className="books-grid">
-      <li>
-        <div className="book">
-          <div className="book-top">
-            <div
-              className="book-cover"
-              style={{
-                width: 128,
-                height: 193,
-                backgroundImage:
-                  'url("http://books.google.com/books/content?id=PGR2AwAAQBAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73-GnPVEyb7MOCxDzOYF1PTQRuf6nCss9LMNOSWBpxBrz8Pm2_mFtWMMg_Y1dx92HT7cUoQBeSWjs3oEztBVhUeDFQX6-tWlWz1-feexS0mlJPjotcwFqAg6hBYDXuK_bkyHD-y&source=gbs_api")',
-              }}
-            ></div>
-            <div className="book-shelf-changer">
-              <select>
-                <option value="move" disabled>
-                  Move to...
-                </option>
-                <option value="currentlyReading">Currently Reading</option>
-                <option value="wantToRead">Want to Read</option>
-                <option value="read">Read</option>
-                <option value="none">None</option>
-              </select>
+      {!books && (
+        <i className="pi pi-spin pi-spinner" style={{ fontSize: "3em" }}></i>
+      )}
+      {books &&
+        books.map((book) => (
+          <li key={book.id}>
+            <div className="book">
+              <div className="book-top">
+                <div
+                  className="book-cover"
+                  style={{
+                    width: 128,
+                    height: 193,
+                    backgroundImage: `url("${book.imageLinks.thumbnail}")`,
+                  }}
+                ></div>
+                <div className="book-shelf-changer">
+                  <select
+                    onChange={(e) => {
+                      const targetShelf = e.target.value;
+                      if (
+                        ["read", "wantToRead", "currentlyReading"].indexOf(
+                          targetShelf
+                        ) > -1
+                      ) {
+                        // update
+                        updateShelfHandler(book, targetShelf);
+                      }
+                    }}
+                    value={book.shelf}
+                  >
+                    <option value="move" disabled>
+                      Move to...
+                    </option>
+                    <option value="currentlyReading">Currently Reading</option>
+                    <option value="wantToRead">Want to Read</option>
+                    <option value="read">Read</option>
+                    <option value="none">None</option>
+                  </select>
+                </div>
+              </div>
+              <div className="book-title">{book.title}</div>
+              <div className="book-authors">{book.authors.join(", ")}</div>
             </div>
-          </div>
-          <div className="book-title">To Kill a Mockingbird</div>
-          <div className="book-authors">Harper Lee</div>
-        </div>
-      </li>
-      <li>
-        <div className="book">
-          <div className="book-top">
-            <div
-              className="book-cover"
-              style={{
-                width: 128,
-                height: 188,
-                backgroundImage:
-                  'url("http://books.google.com/books/content?id=yDtCuFHXbAYC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE72RRiTR6U5OUg3IY_LpHTL2NztVWAuZYNFE8dUuC0VlYabeyegLzpAnDPeWxE6RHi0C2ehrR9Gv20LH2dtjpbcUcs8YnH5VCCAH0Y2ICaKOTvrZTCObQbsfp4UbDqQyGISCZfGN&source=gbs_api")',
-              }}
-            ></div>
-            <div className="book-shelf-changer">
-              <select>
-                <option value="move" disabled>
-                  Move to...
-                </option>
-                <option value="currentlyReading">Currently Reading</option>
-                <option value="wantToRead">Want to Read</option>
-                <option value="read">Read</option>
-                <option value="none">None</option>
-              </select>
-            </div>
-          </div>
-          <div className="book-title">Ender's Game</div>
-          <div className="book-authors">Orson Scott Card</div>
-        </div>
-      </li>
+          </li>
+        ))}
     </ol>
   );
 }
