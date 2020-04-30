@@ -30,7 +30,6 @@ function BooksApp() {
         const prevIndex = prevState[book.shelf]
           .map((b) => b.id)
           .indexOf(book.id);
-        console.log(prevIndex);
         if (prevIndex > -1) {
           prevState[book.shelf].splice(prevIndex, 1);
         }

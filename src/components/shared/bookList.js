@@ -1,6 +1,6 @@
 import React from "react";
-
-export default function bookList({ books, updateShelfHandler }) {
+import propTypes from "prop-types";
+function bookList({ books, updateShelfHandler }) {
   return (
     <ol className="books-grid">
       {!books && (
@@ -52,3 +52,8 @@ export default function bookList({ books, updateShelfHandler }) {
     </ol>
   );
 }
+bookList.propTypes = {
+  books: propTypes.array,
+  updateShelfHandler: propTypes.func,
+};
+export default bookList;

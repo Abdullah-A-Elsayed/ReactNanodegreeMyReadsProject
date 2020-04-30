@@ -1,7 +1,8 @@
 import React from "react";
 import Shelf from "./shelf";
 import { Link } from "react-router-dom";
-export default function homePage({ shelvesState, updateShelfHandler }) {
+import propTypes from "prop-types";
+function homePage({ shelvesState, updateShelfHandler }) {
   return (
     <div className="list-books">
       <div className="list-books-title">
@@ -34,3 +35,9 @@ export default function homePage({ shelvesState, updateShelfHandler }) {
     </div>
   );
 }
+
+homePage.propTypes = {
+  shelvesState: propTypes.object,
+  updateShelfHandler: propTypes.func,
+};
+export default homePage;

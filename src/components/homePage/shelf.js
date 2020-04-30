@@ -1,6 +1,7 @@
 import React from "react";
 import BookList from "../shared/bookList";
-export default function currentlyReading({ title, books, updateShelfHandler }) {
+import propTypes from "prop-types";
+function shelf({ title, books, updateShelfHandler }) {
   return (
     <div className="bookshelf">
       <h2 className="bookshelf-title">{title}</h2>
@@ -10,3 +11,10 @@ export default function currentlyReading({ title, books, updateShelfHandler }) {
     </div>
   );
 }
+
+shelf.propTypes = {
+  title: propTypes.string,
+  books: propTypes.array,
+  updateShelfHandler: propTypes.func,
+};
+export default shelf;

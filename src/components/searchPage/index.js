@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import * as BooksAPI from "../../BooksAPI";
 import BookList from "../shared/bookList";
-export default function searchPage({ shelvesState, updateShelfHandler }) {
+import propTypes from "prop-types";
+function searchPage({ shelvesState, updateShelfHandler }) {
   const [searchStr, setSearchStr] = useState("");
   const [allBooks, setAllBooks] = useState([]);
   useEffect(() => {
@@ -51,3 +52,8 @@ export default function searchPage({ shelvesState, updateShelfHandler }) {
     </div>
   );
 }
+searchPage.propTypes = {
+  shelvesState: propTypes.object,
+  updateShelfHandler: propTypes.func,
+};
+export default searchPage;
