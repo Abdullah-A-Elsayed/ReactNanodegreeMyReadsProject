@@ -22,10 +22,11 @@ function BooksApp() {
   }, []);
   // moves a book to another shelf
   const updateShelfHandler = (book, shelf) => {
+    if (shelf === book.shelf) return;
     BooksAPI.update(book, shelf);
     setShelvesState((prevState) => {
       // remove from state
-      if (book.shelf) {
+      if (book.shelf !== "none") {
         const prevIndex = prevState[book.shelf]
           .map((b) => b.id)
           .indexOf(book.id);
@@ -53,7 +54,15 @@ function BooksApp() {
           />
         )}
       />
-      <Route path="/search" render={() => <SearchPage />} />
+      <Route
+        path="/search"
+        render={() => (
+          <SearchPage
+            shelvesState={shelvesState}
+            updateShelfHandler={updateShelfHandler}
+          />
+        )}
+      />
     </div>
   );
 }

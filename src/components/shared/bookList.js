@@ -1,8 +1,6 @@
 import React from "react";
-import { update } from "../../BooksAPI";
 
 export default function bookList({ books, updateShelfHandler }) {
-  console.log(books);
   return (
     <ol className="books-grid">
       {!books && (
