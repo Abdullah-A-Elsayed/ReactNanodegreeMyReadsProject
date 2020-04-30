@@ -5,8 +5,9 @@ import BookList from "../shared/bookList";
 import propTypes from "prop-types";
 function searchPage({ shelvesState, updateShelfHandler }) {
   const [allBooks, setAllBooks] = useState([]);
+  const [userInput, setUserInput] = useState("");
   const searchHandler = async (searchStr) => {
-    console.log(searchStr);
+    setUserInput(searchStr);
     if (searchStr.length === 0) return setAllBooks([]);
     let books = await BooksAPI.search(searchStr, 20);
     if (books.error) return;
@@ -43,11 +44,15 @@ function searchPage({ shelvesState, updateShelfHandler }) {
             type="text"
             placeholder="Search by title or author"
             onChange={(e) => searchHandler(e.target.value)}
+            value={userInput}
           />
         </div>
       </div>
       <div className="search-books-results">
-        <BookList books={allBooks} updateShelfHandler={updateShelfHandler} />
+        <BookList
+          books={userInput ? allBooks : []}
+          updateShelfHandler={updateShelfHandler}
+        />
       </div>
     </div>
   );
